@@ -34,10 +34,9 @@ class Neural(object):
         self.trained = False
 
         self.costs = []
-        self.valCosts = []
 
         for (l1, l2) in zip(shape[:-1], shape[1:]):
-            self.weights.append(np.random.normal(scale = 10, size = (l1+1, l2)))
+            self.weights.append(np.random.normal(scale = 0.12, size = (l1+1, l2)))
 
     def cost(self, X, Y, lamb=1):
         X = np.array(X)
@@ -55,7 +54,7 @@ class Neural(object):
 
         return (costVal + (lamb / 2) * regularization) / m
 
-    def train(self, X, Y, lamb=1e-5, alpha=0.1, maxIter=1000):
+    def train(self, X, Y, lamb=0.1, alpha=0.1, maxIter=3000):
         # TODO: automatically pick an alpha from [0.001, 0.003, 0.01, 0.03, 0.1, 0.3]
         # TODO: prepare training first by scaling vars and etc
 
@@ -71,7 +70,7 @@ class Neural(object):
             if i % 100 == 0:
                 print self.cost(X, Y, lamb)
 
-            # self.costs.append(self.cost(X, Y, lamb))
+            self.costs.append(self.cost(X, Y, lamb))
 
             self.clear()
             self.forward(X)
@@ -98,8 +97,8 @@ class Neural(object):
             for i in range(len(self.weights)):
                 self.weights[i] = self.weights[i] - (alpha) * self.Deltas[i]
 
-        # plt.plot(self.costs)
-        # plt.show()
+        plt.plot(self.costs)
+        plt.show()
 
         plt.scatter(X[:,0], X[:, 1], c=Y)
         plt.gray()
@@ -149,40 +148,16 @@ class Neural(object):
 training  = [[0, 0],
              [1, 0],
              [0, 1],
-             [1, 1],
-             [0, 0],
-             [1, 0],
-             [0, 1],
-             [1, 1],
-             [0, 0],
-             [1, 0],
-             [0, 1],
-             [1, 1],
-             [0, 0],
-             [1, 0],
-             [0, 1],
              [1, 1]]
 
 target = [[1],
           [0],
           [0],
-          [1],
-          [1],
-          [0],
-          [0],
-          [1],
-          [1],
-          [0],
-          [0],
-          [1],
-          [1],
-          [0],
-          [0],
           [1]]
 
 mn = Neural((2, 2, 1))
-mn.train(training, target)
+# mn.train(training, target)
 
-# weight1 = np.array([[-30, 10],[20, -20],[20, -20]])
-# weight2 = np.array([[-10],[20],[20]])
-# mn.weights = [weight1, weight2]
+weight1 = np.array([[-30, 10],[20, -20],[20, -20]])
+weight2 = np.array([[10],[-20],[-20]])
+mn.weights = [weight1, weight2]
