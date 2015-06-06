@@ -33,10 +33,11 @@ class Neural(object):
         self.Deltas = []
         self.trained = False
 
+        # uncomment to DEBUG
         self.costs = []
 
         for (l1, l2) in zip(shape[:-1], shape[1:]):
-            self.weights.append(np.random.normal(scale = 0.12, size = (l1+1, l2)))
+            self.weights.append(np.random.normal(scale = 0.2, size = (l1+1, l2)))
 
     def cost(self, X, Y, lamb=1):
         X = np.array(X)
@@ -54,22 +55,23 @@ class Neural(object):
 
         return (costVal + (lamb / 2) * regularization) / m
 
-    def train(self, X, Y, lamb=0.1, alpha=0.1, maxIter=3000):
+    def train(self, X, Y, lamb=0.01, alpha=0.03, maxIter=100000):
         # TODO: automatically pick an alpha from [0.001, 0.003, 0.01, 0.03, 0.1, 0.3]
         # TODO: prepare training first by scaling vars and etc
 
         X = np.array(X)
-        Y = np.array(self.forward(X))
-        m = X.shape[0]
+        Y = np.array(Y)
+        m = float(X.shape[0])
         self.trained = True
         self.clear()
 
+        # uncomment to DEBUG
         self.costs = []
 
         for i in range(maxIter):
+
             if i % 100 == 0:
                 print self.cost(X, Y, lamb)
-
             self.costs.append(self.cost(X, Y, lamb))
 
             self.clear()
@@ -89,21 +91,26 @@ class Neural(object):
                 self.deltas.insert(0, newdelta)
                 self.Deltas.insert(0, (self.a[layerIndex - 1].T).dot(newdelta))
 
-            for i in range(len(self.Deltas)):
-                newDelta = (1 / m) * self.Deltas[i]
-                newDelta[1:,:] = newDelta[1:,:] + (lamb / m) * self.weights[i][1:,:]
-                self.Deltas[i] = newDelta
+            for k in range(len(self.Deltas)):
+                newDelta = (1.0 / m) * self.Deltas[k]
+                newDelta[1:,:] = newDelta[1:,:] + (lamb / m) * self.weights[k][1:,:]
+                self.Deltas[k] = newDelta
 
-            for i in range(len(self.weights)):
-                self.weights[i] = self.weights[i] - (alpha) * self.Deltas[i]
+            for k in range(len(self.weights)):
+                self.weights[k] = self.weights[k] - float(alpha) * self.Deltas[k]
+
+        # uncomment to DEBUG
+        self.clear()
+        self.forward(X)
 
         plt.plot(self.costs)
         plt.show()
 
-        plt.scatter(X[:,0], X[:, 1], c=Y)
+        plt.scatter(X[:,0], X[:, 1], c=self.a[-1])
         plt.gray()
         plt.show()
 
+        # comment to DEBUG
         # self.clear()
 
     def clear(self):
@@ -156,8 +163,8 @@ target = [[1],
           [1]]
 
 mn = Neural((2, 2, 1))
-# mn.train(training, target)
+mn.train(training, target)
 
-weight1 = np.array([[-30, 10],[20, -20],[20, -20]])
-weight2 = np.array([[10],[-20],[-20]])
-mn.weights = [weight1, weight2]
+# weight1 = np.array([[-30, 10],[20, -20],[20, -20]])
+# weight2 = np.array([[10],[-20],[-20]])
+# mn.weights = [weight1, weight2]
