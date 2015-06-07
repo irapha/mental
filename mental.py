@@ -55,6 +55,10 @@ class Neural(object):
 
         return (costVal + (regParam / 2) * regularization) / m
 
+    def cost(self, X, Y, regParam=0.001):
+        X = self._featureScaling(np.array(X))
+        return self._cost(X, Y, regParam)
+
     def train(self, X, Y, regParam=0.001, learnRate=0.1, maxIter=100000, testing=False):
         # TODO: automatically pick an learnRate from [0.001, 0.003, 0.01, 0.03, 0.1, 0.3]
         # TODO: automatically pick a regParamda?
@@ -118,7 +122,9 @@ class Neural(object):
         else:
             print "" # creates new line from the progress bar
 
+        finalCost = self._cost(X, Y, regParam)
         self._clear()
+        return finalCost
 
     def _clear(self):
         self._z = []
