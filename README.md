@@ -23,7 +23,7 @@ targetValues = [[0],
 
 network.train(trainingSet, targetValues)
 # optional parameters: regularization, learningRate, maxIter, testing
-# (coming soon: plotting, activation functions)
+# (coming soon: more plotting, more activation functions)
 ```
 
 Make predictions!
@@ -37,7 +37,7 @@ Print more information and plot cost over training iterations
 testing = True   # prints and plots
 network.train(trainingSet, targetValues, 0.001, 0.01, 100000, testing)
 ```
-![Cost vs. Iterations](/imgs/costvsiter.png?raw=true =x200 "Cost vs. Training Iterations")
+![Cost vs. Iterations](/imgs/costvsiter.png?raw=true =200x "Cost vs. Training Iterations")
 
 Plot cost of training set (Jtrain) and cost of validation set (Jcv) as a function of the training set size.
 ```python
