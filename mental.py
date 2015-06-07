@@ -136,6 +136,32 @@ class Neural(object):
 
         return self._a[-1]
 
+    def predict(self, X, rounding=True):
+        X = np.array(X)
+        
+        # add bias to input
+        a = np.ones((X.shape[0], X.shape[1] + 1))
+        a[:,1:] = X[:]
+
+        for i, W in enumerate(self._weights):
+            # a[-1] is last layer's output (with bias)
+            # z is the input for this layer
+            z = a.dot(W)
+            if i == len(self._weights) - 1:
+                # just activate output layer
+                zAct = self._sgm(z)
+            else:
+                # activate z and add bias
+                zAct = np.ones((z.shape[0], z.shape[1] + 1))
+                zAct[:,1:] = self._sgm(z)
+            # a is z activated; output for this layer (with bias if hidden layer)
+            a = zAct
+
+        if rounding:
+            return np.rint(a)
+        else:
+            return a
+
     def _sgm(self, zee, prime=False):
         if not prime:
             return 1/(1 + np.exp(-zee))
