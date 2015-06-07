@@ -40,7 +40,7 @@ network.train(trainingSet, targetValues, 0.001, 0.01, 100000, testing)
 <div width="100%" align="center">
   <img src="/imgs/costvsiter.png?raw=true" width="450px alt="Cost vs. Iterations" title="Cost vs. Training Iterations"/>
 </div>
-
+<br/>
 
 * Plot cost of training set (Jtrain) and cost of validation set (Jcv) as a function of the training set size.
 ```python
