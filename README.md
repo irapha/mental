@@ -32,14 +32,14 @@ network.predict([[0, 1]])   # [[1]]
 ```
 
 ### More options!
-Print more information and plot cost over training iterations
+* Print more information and plot cost over training iterations
 ```python
 testing = True   # prints and plots
 network.train(trainingSet, targetValues, 0.001, 0.01, 100000, testing)
 ```
-![Cost vs. Iterations](/imgs/costvsiter.png?raw=true =200x "Cost vs. Training Iterations")
+<img src="/imgs/costvsiter.png?raw=true" width="200px alt="Cost vs. Iterations" title="Cost vs. Training Iterations"/>
 
-Plot cost of training set (Jtrain) and cost of validation set (Jcv) as a function of the training set size.
+* Plot cost of training set (Jtrain) and cost of validation set (Jcv) as a function of the training set size.
 ```python
 import matplotlib.pyplot as plt
 trainCosts = []
