@@ -16,13 +16,13 @@ import numpy as np
 #
 # wineFeats = np.array(wineFeats)
 # targetVals = np.array(targetVals)
-
+#
 # trainingFeatures = wineFeats[0:130,:]
 # trainingTarget = targetVals[0:130,:]
 #
 # testFeatures = wineFeats[131:,:]
 # testTarget = targetVals[131:,:]
-
+#
 # drunken = Neural((13, 30, 20, 10, 3))
 # drunken.train(trainingFeatures, trainingTarget, 0.01, 0.01, 100000, True)
 # print testTarget - drunken.predict(testFeatures) # shows errors in test set
@@ -37,11 +37,11 @@ import numpy as np
 # wineFeats = np.array(wineFeats)
 # targetVals = np.array(targetVals)
 #
-# trainFeats = wineFeats[0:88]
-# trainTargs = targetVals[0:88]
+# trainFeats = wineFeats[0:121,:]
+# trainTargs = targetVals[0:121,:]
 #
-# cvFeats = wineFeats[89:-1]
-# cvTargs = targetVals[89:-1]
+# cvFeats = wineFeats[122:,:]
+# cvTargs = targetVals[122:,:]
 #
 # trainCosts = []
 # cvCosts = []
@@ -51,7 +51,7 @@ import numpy as np
 #     net = Neural((13, 30, 20, 10, 3))
 #     net.train(trainFeats[:i], trainTargs[:i], 0.01, 0.01, 50000)
 #     trainCosts.append(net.cost(trainFeats[:i], trainTargs[:i], 0.01))
-#     cvCosts.append(net.cost(cvFeats[:i], cvTargs[:i], 0.01))
+#     cvCosts.append(net.cost(cvFeats, cvTargs, 0.01))
 #
 # plt.plot(trainCosts)
 # plt.plot(cvCosts)
