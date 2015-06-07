@@ -21,11 +21,12 @@ targetValues = [[0],
                 [1],
                 [0]]
 
-# optional parameters: regularization, learningRate, maxIter (coming soon: plotting values)
 network.train(trainingSet, targetValues)
+# optional parameters: regularization, learningRate, maxIter
+# (coming soon: plotting, activation functions)
 ```
 
 Make predictions!
 ```python
-network.predict([[0, 1]]) # -> [[1]] :)
+network.predict([[0, 1]])   # [[1]]
 ```
