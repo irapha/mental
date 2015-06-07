@@ -23,7 +23,7 @@ targetValues = [[0],
 
 network.train(trainingSet, targetValues)
 # optional parameters: regularization, learningRate, maxIter
-# (coming soon: plotting values)
+# (coming soon: plotting, activation functions)
 ```
 
 Make predictions!
