@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import sys
 
 class Neural(object):
@@ -38,7 +39,7 @@ class Neural(object):
         for (l1, l2) in zip(self.shape[:-1], self.shape[1:]):
             self._weights.append(np.random.normal(scale = 0.2, size = (l1+1, l2)))
 
-    def cost(self, X, Y, regParam=0.001):
+    def _cost(self, X, Y, regParam=0.001):
         X = np.array(X)
         Y = np.array(Y)
         m = float(X.shape[0])
@@ -54,12 +55,11 @@ class Neural(object):
 
         return (costVal + (regParam / 2) * regularization) / m
 
-    def train(self, X, Y, regParam=0.001, learnRate=0.1, maxIter=100000):
+    def train(self, X, Y, regParam=0.001, learnRate=0.1, maxIter=100000, testing=False):
         # TODO: automatically pick an learnRate from [0.001, 0.003, 0.01, 0.03, 0.1, 0.3]
         # TODO: automatically pick a regParamda?
-        # TODO: preprocess training set with feature scaling and etc.
 
-        X = np.array(X)
+        X = self._featureScaling(np.array(X))
         Y = np.array(Y)
         m = float(X.shape[0])
         learnRate = float(learnRate)
@@ -67,13 +67,21 @@ class Neural(object):
         self.trained = True
         self._clear()
 
-        print "training..."
+        if testing:
+            costs = []
+        else:
+            print "training..."
 
         for i in range(maxIter):
-            # print progress bar
-            if i % (maxIter / 100) == 0:
-                sys.stdout.write(".")
-                sys.stdout.flush()
+            if testing:
+                costs.append(self._cost(X, Y, regParam))
+                if i % 100:
+                    print i, "\tcost:", costs[-1],
+            else:
+                # print progress bar
+                if i % (maxIter / 100) == 0:
+                    sys.stdout.write(".")
+                    sys.stdout.flush()
 
             self._clear()
             self._forward(X)
@@ -101,7 +109,14 @@ class Neural(object):
             for k in range(len(self._weights)):
                 self._weights[k] = self._weights[k] - learnRate * self._Deltas[k]
 
-        print "" # creates new line from the progress bar
+            if testing and i % 100:
+                print "\t   one weight:", self._weights[0][1,0], "\t one delta:", self._Deltas[0][1,0]
+
+        if testing:
+            plt.plot(costs)
+            plt.show()
+        else:
+            print "" # creates new line from the progress bar
 
         self._clear()
 
@@ -113,7 +128,6 @@ class Neural(object):
 
     def _forward(self, X):
         self._clear()
-        X = np.array(X)
 
         # add bias to input
         inp = np.ones((X.shape[0], X.shape[1] + 1))
@@ -137,8 +151,8 @@ class Neural(object):
         return self._a[-1]
 
     def predict(self, X, rounding=True):
-        X = np.array(X)
-        
+        X = self._featureScaling(np.array(X))
+
         # add bias to input
         a = np.ones((X.shape[0], X.shape[1] + 1))
         a[:,1:] = X[:]
@@ -162,23 +176,15 @@ class Neural(object):
         else:
             return a
 
+    def _featureScaling(self, X):
+        # for each feature x, xi = (xi - avg(x)) / (max(x) - min(x))
+        stdDev = np.amax(X, axis=0) - np.amin(X, axis=0)
+        mean = np.mean(X, axis=0)
+        return ((X - mean) / stdDev)
+
     def _sgm(self, zee, prime=False):
         if not prime:
             return 1/(1 + np.exp(-zee))
         else:
             sgm = self._sgm(zee)
             return sgm * (1 - sgm)
-
-# dummy data for XOR function
-training  = [[0.0, 0.0],
-             [1.0, 0.0],
-             [0.0, 1.0],
-             [1.0, 1.0]]
-
-target = [[0.0],
-          [1.0],
-          [1.0],
-          [0.0]]
-
-mn = Neural((2, 2, 1))
-mn.train(training, target)
